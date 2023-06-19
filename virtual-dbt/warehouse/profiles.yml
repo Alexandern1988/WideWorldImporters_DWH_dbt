@@ -5,7 +5,7 @@ warehouse:
       type: sqlserver
       driver: 'ODBC Driver 17 for SQL Server'
       server: DESKTOP-UFT0S9S
-      port: 1433s
+      port: 1433
       database: WideWorldImporters
       schema: dev
       windows_login: True
