@@ -7,7 +7,7 @@ with dimStockGroup as (
     select 
         sg.StockGroupID
         ,sg.StockGroupName
-    from {{ ref('stockGroup_mrr') }} as sg
+    from {{ ref('stockGroups_mrr') }} as sg
 )
 select * 
 from dimStockGroup

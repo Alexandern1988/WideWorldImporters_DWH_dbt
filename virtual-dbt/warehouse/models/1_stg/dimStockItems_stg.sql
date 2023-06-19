@@ -20,8 +20,8 @@ with dimStockItems as (
         ,si.TypicalWeightPerUnit
         ,si.UnitPackageID
         ,si.OuterPackageID
-        ,unit_pack.PackageTypeName
-        ,outer_pack.PackageTypeName
+        ,unit_pack.PackageTypeName as UnitPackageTypeName
+        ,outer_pack.PackageTypeName as OuterPackageTypeName
         ,getdate() as UnitPriceEffectiveDate
         ,s.SupplierName
         ,c.ColorName
@@ -34,12 +34,12 @@ with dimStockItems as (
         ,sih.LastEditedWhen
         ,sih.ReorderLevel
         ,getdate() as BinLocationEffectiveDate
-    from Warehouse.StockItems as si
-        left join {{ ref('stockItems_mrr') }}   as sih        on si.StockItemID = sih.StockItemID
-        left join {{ ref('packageTypes_mrr') }} as unit_pack  on si.UnitPackageID = unit_pack.PackageTypeID
-        left join {{ ref('packageTypes_mrr') }} as outer_pack on si.OuterPackageID = outer_pack.PackageTypeID
-        left join {{ ref('colors_mrr') }}       as c          on si.ColorID = c.ColorID
-        left join {{ ref('suppliers_mrr') }}    as s          on s.SupplierID = si.SupplierID
+    from {{ ref('stockItems_mrr') }} as si
+        left join {{ ref('stockItemHoldings_mrr') }} as sih        on si.StockItemID = sih.StockItemID
+        left join {{ ref('packageTypes_mrr') }}      as unit_pack  on si.UnitPackageID = unit_pack.PackageTypeID
+        left join {{ ref('packageTypes_mrr') }}      as outer_pack on si.OuterPackageID = outer_pack.PackageTypeID
+        left join {{ ref('colors_mrr') }}            as c          on si.ColorID = c.ColorID
+        left join {{ ref('suppliers_mrr') }}         as s          on s.SupplierID = si.SupplierID
 )
 select *
 from dimStockItems
