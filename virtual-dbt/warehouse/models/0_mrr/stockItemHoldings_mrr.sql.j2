@@ -11,8 +11,8 @@ with stockItemHoldings as (
         ,sih.LastStocktakeQuantity
         ,sih.TargetStockLevel
         ,sih.BinLocation
-        ,sih.BinLocation
         ,sih.LastEditedWhen
+        ,sih.ReorderLevel
     from {{ source('Warehouse', 'StockItemHoldings') }} as sih
 )
 select *

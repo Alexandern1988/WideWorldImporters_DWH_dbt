@@ -12,10 +12,13 @@ with stockItems as (
         ,si.IsChillerStock
         ,si.Barcode
         ,si.ColorID
+        ,si.SupplierID
         ,si.UnitPackageID
         ,si.OuterPackageID
         ,si.TaxRate
-        ,si.UnitPrice 
+        ,si.UnitPrice
+        ,si.RecommendedRetailPrice
+        ,si.TypicalWeightPerUnit
     from {{ source('Warehouse', 'StockItems') }} as si
 )
 select *
