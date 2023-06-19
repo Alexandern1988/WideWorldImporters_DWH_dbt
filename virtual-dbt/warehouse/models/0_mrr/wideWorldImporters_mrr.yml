@@ -1,0 +1,26 @@
+version: 2
+
+sources:
+  - name: Warehouse
+    description: A clone of the original WideWorldImporters database
+    database: WideWorldImporters
+    schema: Warehouse
+    tables:
+      - name: StockGroups
+      - name: PackageTypes
+      - name: Colors
+      - name: StockItems
+      - name: StockItemHoldings
+  - name: Application
+    description: A clone of the original WideWorldImporters database
+    database: WideWorldImporters
+    schema: Application
+    tables:
+      - name: TransactionTypes
+  - name: Purchasing    
+    description: A clone of the original WideWorldImporters database
+    database: WideWorldImporters
+    schema: Purchasing
+    tables:
+      - name: Suppliers
+
