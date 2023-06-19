@@ -1,0 +1,14 @@
+warehouse:
+  target: dev
+  outputs:
+    dev:
+      type: sqlserver
+      driver: 'ODBC Driver 17 for SQL Server'
+      server: DESKTOP-UFT0S9S
+      port: 1433s
+      database: WideWorldImporters
+      schema: dev
+      windows_login: True
+      trust_cert: True
+
+
