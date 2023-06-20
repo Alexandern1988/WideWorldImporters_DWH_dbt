@@ -9,4 +9,4 @@ with packageTypes as (
         ,pt.PackageTypeName
     from {{ source('Warehouse', 'PackageTypes') }} as pt
 )
-select * packageTypes
+select * from packageTypes
