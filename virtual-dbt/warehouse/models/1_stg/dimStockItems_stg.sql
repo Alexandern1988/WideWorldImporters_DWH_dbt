@@ -7,32 +7,31 @@ with dimStockItems as (
     SELECT 
         si.StockItemID
         ,si.StockItemName
+        ,si.SupplierID
+        ,s.SupplierName        
         ,si.Brand
         ,si.[Size]
         ,si.IsChillerStock
         ,si.Barcode
         ,si.ColorID
-        ,si.SupplierID
+        ,c.ColorName
+        ,si.UnitPackageID 
+        ,unit_pack.PackageTypeName as UnitPackageTypeName
+        ,si.OuterPackageID
+        ,outer_pack.PackageTypeName as OuterPackageTypeName
         ,si.TaxRate
         ,si.UnitPrice as OriginalUnitPrice
         ,si.UnitPrice as CurrentUnitPrice
+        ,getdate() as UnitPriceEffectiveDate
         ,si.RecommendedRetailPrice
         ,si.TypicalWeightPerUnit
-        ,si.UnitPackageID
-        ,si.OuterPackageID
-        ,unit_pack.PackageTypeName as UnitPackageTypeName
-        ,outer_pack.PackageTypeName as OuterPackageTypeName
-        ,getdate() as UnitPriceEffectiveDate
-        ,s.SupplierName
-        ,c.ColorName
         ,sih.LastCostPrice
         ,sih.QuantityOnHand
         ,sih.LastStocktakeQuantity
         ,sih.TargetStockLevel
+        ,sih.ReorderLevel
         ,sih.BinLocation as OriginalBinLocation
         ,sih.BinLocation as CurrentBinLocation
-        ,sih.LastEditedWhen
-        ,sih.ReorderLevel
         ,getdate() as BinLocationEffectiveDate
     from {{ ref('stockItems_mrr') }} as si
         left join {{ ref('stockItemHoldings_mrr') }} as sih        on si.StockItemID = sih.StockItemID

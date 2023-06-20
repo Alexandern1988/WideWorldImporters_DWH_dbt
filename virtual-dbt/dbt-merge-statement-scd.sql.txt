@@ -1,0 +1,54 @@
+WITH
+
+using_clause AS (
+
+    SELECT
+        ride_id,
+        subtotal,
+        tip,
+        max(load_timestamp) as load_timestamp
+
+    FROM {{ ref('rides_to_load') }}
+
+
+    {% if is_incremental() %}
+
+        WHERE load_timestamp > (SELECT max(load_timestamp) FROM {{ this }})
+
+    {% endif %}
+
+),
+
+updates AS (
+
+    SELECT
+        ride_id,
+        subtotal,
+        tip,
+        load_timestamp
+
+    FROM using_clause
+
+    {% if is_incremental() %}
+
+        WHERE ride_id IN (SELECT ride_id FROM {{ this }})
+
+    {% endif %}
+
+),
+
+inserts AS (
+
+    SELECT
+        ride_id,
+        subtotal,
+        NVL(tip, 0, tip),
+        load_timestamp
+
+    FROM using_clause
+
+    WHERE ride_id NOT IN (SELECT ride_id FROM updates)
+
+)
+
+SELECT * FROM updates UNION inserts
