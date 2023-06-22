@@ -5,7 +5,7 @@
 }}
 with dimInvoice as (
     select 
-        ic.InvoiceID
+        ic.InvoiceID as InvoiceKey
         ,ic.CustomerID
         ,cus.CustomerName
         ,ic.BillToCustomerID
