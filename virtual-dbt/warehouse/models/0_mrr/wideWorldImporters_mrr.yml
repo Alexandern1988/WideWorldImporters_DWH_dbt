@@ -17,10 +17,26 @@ sources:
     schema: Application
     tables:
       - name: TransactionTypes
+      - name: People
+      - name: Cities
+      - name: StateProvinces
+      - name: DeliveryMethods
+      - name: PaymentMethods
   - name: Purchasing    
     description: A clone of the original WideWorldImporters database
     database: WideWorldImporters
     schema: Purchasing
     tables:
       - name: Suppliers
-
+  - name: Sales    
+    description: A clone of the original WideWorldImporters database
+    database: WideWorldImporters
+    schema: Sales
+    tables:
+      - name: Customers
+      - name: CustomerCategories
+      - name: BuyingGroups
+      - name: Invoices
+      - name: Orders
+      - name: InvoiceLines
+      - name: CustomerTransactions

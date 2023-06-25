@@ -2,11 +2,11 @@
   config(
     materialized = 'incremental',
     incremental_strategy='merge',
-    unique_key = 'ColorID'
+    unique_key = 'InvoiceKey',
     )
 }}
 select *
-from {{ ref('dimColors_stg') }} c
+from {{ ref('dimInvoice_stg') }} di
 {% if is_incremental() %}
-  where c.ColorID not in (select ColorID from {{ this }})
+  where di.InvoiceKey not in (select InvoiceKey from {{ this }})
 {% endif %}
