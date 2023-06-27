@@ -5,7 +5,8 @@
 }}
 with dimCustomer as (
 select 
-    cus.CustomerID
+    {{ dbt_utils.generate_surrogate_key(['cus.CustomerID', 'cus.PhoneNumber']) }} as SK_Customer
+    ,cus.CustomerID
     ,cus.CustomerName
     ,cus.CustomerCategoryID
     ,cc.CustomerCategoryName

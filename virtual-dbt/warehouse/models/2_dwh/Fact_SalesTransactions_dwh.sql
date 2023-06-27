@@ -1,31 +1,12 @@
 {{
   config(
-    materialized = 'table',
+    materialized = 'incremental',
+    incremental_strategy = 'merge',
+    unique_key = 'SK_SalesTransactions',
     )
 }}
-with lineProfit_agg as (
-	select 
-		sicl.InvoiceID
-		,sum(sicl.LineProfit) as total_lineProfit
-	from {{ ref('InvoiceLines_stg') }} sicl
-	group by sicl.InvoiceID
-)
-select 
-	dd.DateKey
-	,dc.CustomerID as CustomerKey
-	,dic.InvoiceKey
-	,dp.PeopleKey
-	,ct.TransactionTypeID as TransactionTypeKey
-	,dpy.PaymentKey as paymentMethodKey
-	,ct.CustomerTransactionID as TransactionID
-	,ct.AmountExcludingTax
-	,ct.TaxAmount
-	,ct.TransactionAmount
-	,lpa.total_lineProfit as TransactionProfit
-from dev.dimDate_dwh as dd 
-	join {{ ref('customerTransactions_stg') }} as ct on convert(date, dd.DateKey, 120) = ct.TransactionDate
-	left join {{ ref('dimInvoice_dwh') }}      as dic on dic.InvoiceKey = ct.InvoiceID
-	left join {{ ref('dimPeople_dwh') }}       as dp on dic.PrimaryContactPersonID = dp.PeopleKey
-	left join {{ ref('dimCustomer_dwh') }}     as dc on ct.CustomerID = dc.CustomerID and dc.CurrentFlag = 1
-	left join {{ ref('dimPayment_dwh') }}      as dpy on dpy.PaymentKey = ct.PaymentMethodID
-	left join lineProfit_agg                   as lpa on dic.InvoiceKey = lpa.InvoiceID
+select *
+from {{ ref('Fact_SalesTransactions_stg') }} as fst
+{% if is_incremental() %}
+  where  fst.SK_SalesTransactions not in (select SK_SalesTransactions from {{ this }})
+{% endif %}

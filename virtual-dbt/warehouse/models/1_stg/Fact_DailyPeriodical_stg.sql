@@ -30,7 +30,7 @@ from (
 		,case when convert(date, t.DateKey) = convert(date, getdate()) then 0 else 1 end as InActiveDay
 		,case when convert(date, t.DateKey) = convert(date, getdate()) then convert(date, getdate()) 
 			  else DATEADD(DAY, -1, convert(date, getdate())) end as LastBuyDateKey
-	from {{ ref('Fact_SalesTransactions_dwh') }} as t    
+	from  {{ ref('Fact_SalesTransactions_dwh') }} as t    
 	group by  
 		t.DateKey
 		,t.CustomerKey
@@ -65,7 +65,8 @@ group by fst.CustomerKey, fst.datekey
 		left join {{ ref('dimPeople_dwh') }} as dp on dis.PrimaryContactPersonID = dp.PeopleKey
 )
 select 
-	trs.CustomerKey
+	{{ dbt_utils.generate_surrogate_key(['trs.CustomerKey', 'ivs.DateKey','pp.PeopleKey']) }} as SK_DailyPeriodical
+	,trs.CustomerKey
 	,ivs.DateKey
 	,pp.PeopleKey
 	,trs.TotalPurchasePrice
@@ -79,4 +80,3 @@ select
 from transactions trs
 	left join invoices as ivs on trs.CustomerKey = ivs.CustomerKey
 	left join peoples as pp on trs.CustomerKey = pp.CustomerID
-
