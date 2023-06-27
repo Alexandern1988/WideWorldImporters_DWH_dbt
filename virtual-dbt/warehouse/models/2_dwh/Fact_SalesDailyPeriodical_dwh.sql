@@ -6,7 +6,7 @@
     )
 }}
 select *
-from {{ ref('Fact_DailyPeriodical_stg') }} as fdp
+from {{ ref('Fact_SalesDailyPeriodical_stg') }} as fdp
 {% if is_incremental() %}
   where fdp.SK_DailyPeriodical not in (select SK_DailyPeriodical from {{ this }})
 {% endif %}

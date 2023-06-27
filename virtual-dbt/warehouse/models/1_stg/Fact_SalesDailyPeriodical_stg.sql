@@ -16,7 +16,7 @@ select
 from (
 	select 
 		 t.DateKey
-		,t.CustomerKey
+		,dc.CustomerID as CustomerKey
 		,t.InvoiceKey
 		,t.PeopleKey
 		,t.TransactionTypeKey
@@ -30,10 +30,11 @@ from (
 		,case when convert(date, t.DateKey) = convert(date, getdate()) then 0 else 1 end as InActiveDay
 		,case when convert(date, t.DateKey) = convert(date, getdate()) then convert(date, getdate()) 
 			  else DATEADD(DAY, -1, convert(date, getdate())) end as LastBuyDateKey
-	from  {{ ref('Fact_SalesTransactions_dwh') }} as t    
+	from  {{ ref('dimCustomer_dwh') }} as dc 
+		left join {{ ref('Fact_SalesTransactions_dwh') }} as t on dc.CustomerID = t.CustomerKey   
 	group by  
 		t.DateKey
-		,t.CustomerKey
+		,dc.CustomerID
 		,t.InvoiceKey
 		,t.PeopleKey
 		,t.TransactionTypeKey
