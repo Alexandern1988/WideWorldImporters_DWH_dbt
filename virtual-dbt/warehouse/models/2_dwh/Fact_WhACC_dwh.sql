@@ -6,7 +6,7 @@
     )
 }}
 select *
-from Fact_DailyStockItemTrans_stg as dst
+from {{ ref('Fact_WhACC_stg') }} as fa
 {% if is_incremental() %}
-  where dst.SK_DailyStockItems not in (select SK_DailyStockItems from {{ this }})
+  where fa.SK_DailyStockItems not in (select SK_DailyStockItems from {{ this }})
 {% endif %}
