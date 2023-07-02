@@ -2,12 +2,13 @@
   config(
     materialized = 'incremental',
     incremental_strategy='merge',
-    unique_key = 'CustomerID',
+    unique_key = 'SK_Customer',
     )
 }}
 
 with new_records as (
     select
+        src.SK_Customer,
         src.CustomerID,
         src.CustomerName,
         src.CustomerCategoryID,
@@ -30,12 +31,13 @@ with new_records as (
         src.CurrentFlag
     from {{ ref('dimCustomer_stg_scd') }} as src
     {% if is_incremental() %}
-      where src.CustomerID not in (select CustomerID from {{ this }})
+      where src.SK_Customer not in (select SK_Customer from {{ this }})
     {% endif %}
      
 )
 ,updated_records as (
     select
+        trg.SK_Customer,
         trg.CustomerID,
         trg.CustomerName,
         trg.CustomerCategoryID,
@@ -60,6 +62,7 @@ with new_records as (
     where trg.PhoneNumber != src.PhoneNumber AND trg.StartDate != src.StartDate
     union
     select
+        src.SK_Customer,
         src.CustomerID,
         src.CustomerName,
         src.CustomerCategoryID,

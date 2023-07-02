@@ -11,6 +11,7 @@ sources:
       - name: Colors
       - name: StockItems
       - name: StockItemHoldings
+      - name: StockItemTransactions
   - name: Application
     description: A clone of the original WideWorldImporters database
     database: WideWorldImporters

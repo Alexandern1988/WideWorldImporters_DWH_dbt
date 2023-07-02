@@ -4,7 +4,7 @@
    config(
        target_database='WideWorldImporters',
        target_schema='dev',
-       unique_key='CustomerID',
+       unique_key='sk_customer',
        strategy='timestamp',
        updated_at='StartDate',
    )
